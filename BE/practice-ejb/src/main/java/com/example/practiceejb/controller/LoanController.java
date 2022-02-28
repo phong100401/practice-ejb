@@ -1,6 +1,7 @@
 package com.example.practiceejb.controller;
 
 import com.example.practiceejb.entity.Loan;
+import com.example.practiceejb.entity.LoanBeforeEndOfTenure;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,5 +29,14 @@ public class LoanController {
         double totalLoanAmount = remainingLoan * rateOfEarlySettleMent;
 
         return new ResponseEntity<>(totalLoanAmount, HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "calculateTotalLoanToBePaid", method = RequestMethod.POST)
+    public ResponseEntity<Object> calculateTotalLoanToBePaidBeforeEndOfTenure(@RequestBody LoanBeforeEndOfTenure loanBeforeEndOfTenure) {
+        double loanLeftToPay = loanBeforeEndOfTenure.getLoan();
+        double rateOfEarlySettleMent = loanBeforeEndOfTenure.getRate() / 100;
+        double totalLoanToPay = loanLeftToPay * (1 + rateOfEarlySettleMent);
+
+        return new ResponseEntity<>(totalLoanToPay, HttpStatus.OK);
     }
 }
